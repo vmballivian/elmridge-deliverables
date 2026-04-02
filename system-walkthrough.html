@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+        background: #f8fafc;
+        color: #1a1a1a;
+        padding: 40px;
+    }
+    .container { max-width: 1000px; margin: 0 auto; }
+
+    .page-title {
+        text-align: center;
+        font-size: 28px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 6px;
+    }
+    .page-subtitle {
+        text-align: center;
+        font-size: 14px;
+        color: #64748b;
+        margin-bottom: 8px;
+    }
+    .page-date {
+        text-align: center;
+        font-size: 12px;
+        color: #94a3b8;
+        margin-bottom: 50px;
+    }
+
+    /* SECTION HEADERS */
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        margin-top: 50px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #f1f5f9;
+    }
+    .section-header h2 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+    .section-num {
+        font-size: 13px;
+        font-weight: 700;
+        color: white;
+        background: #0f172a;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .section-badge {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .badge-green { background: #dcfce7; color: #166534; }
+    .badge-blue { background: #dbeafe; color: #1e40af; }
+    .badge-amber { background: #fef3c7; color: #92400e; }
+    .badge-purple { background: #ede9fe; color: #5b21b6; }
+
+    /* CARDS */
+    .card {
+        border-radius: 12px;
+        padding: 20px;
+    }
+    .card h3 {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+    .card p, .card-body {
+        font-size: 12px;
+        line-height: 1.6;
+        color: #475569;
+    }
+    .card-green { background: #f0fdf4; border: 2px solid #86efac; }
+    .card-green h3 { color: #166534; }
+    .card-blue { background: #eff6ff; border: 2px solid #93c5fd; }
+    .card-blue h3 { color: #1e40af; }
+    .card-orange { background: #fff7ed; border: 2px solid #fdba74; }
+    .card-orange h3 { color: #9a3412; }
+    .card-purple { background: #faf5ff; border: 2px solid #c4b5fd; }
+    .card-purple h3 { color: #5b21b6; }
+    .card-red { background: #fef2f2; border: 2px solid #fca5a5; }
+    .card-red h3 { color: #991b1b; }
+    .card-gray { background: #f1f5f9; border: 2px solid #cbd5e1; }
+    .card-gray h3 { color: #334155; }
+
+    /* THREE-CARD ROW */
+    .card-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin: 20px 0;
+    }
+    .card-row-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin: 20px 0;
+    }
+    .card-row-4 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin: 20px 0;
+    }
+
+    /* STAT LINE */
+    .stat-line {
+        font-size: 22px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 4px;
+    }
+    .stat-label {
+        font-size: 11px;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* HIGHLIGHT BAR */
+    .highlight-bar {
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+        color: white;
+        text-align: center;
+        padding: 18px 30px;
+        border-radius: 12px;
+        margin: 24px 0;
+    }
+    .highlight-bar p {
+        font-size: 14px;
+        color: #cbd5e1;
+        line-height: 1.6;
+    }
+    .highlight-bar strong {
+        color: #86efac;
+        font-weight: 700;
+    }
+
+    /* GATE */
+    .gate {
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+        color: white;
+        text-align: center;
+        padding: 28px 30px;
+        border-radius: 12px;
+        margin: 24px 0;
+    }
+    .gate h3 {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: #93c5fd;
+    }
+    .gate p {
+        font-size: 13px;
+        color: #cbd5e1;
+        line-height: 1.6;
+    }
+    .gate .checklist {
+        display: flex;
+        gap: 24px;
+        justify-content: center;
+        margin-top: 14px;
+        flex-wrap: wrap;
+    }
+    .gate .check-item {
+        font-size: 14px;
+        color: #86efac;
+        font-weight: 600;
+    }
+
+    /* FLOW STEPS */
+    .flow-steps {
+        display: flex;
+        align-items: flex-start;
+        gap: 0;
+        margin: 20px 0;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .flow-step {
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 18px 20px;
+        min-width: 180px;
+        max-width: 220px;
+        text-align: center;
+    }
+    .flow-step h4 {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #0f172a;
+        margin-bottom: 6px;
+    }
+    .flow-step p {
+        font-size: 11px;
+        color: #64748b;
+        line-height: 1.5;
+    }
+    .flow-step.highlighted {
+        border-color: #3b82f6;
+        background: #eff6ff;
+    }
+    .flow-arrow {
+        display: flex;
+        align-items: center;
+        font-size: 22px;
+        color: #cbd5e1;
+        padding: 0 8px;
+        padding-top: 10px;
+    }
+
+    /* ENRICHMENT EXAMPLE */
+    .enrich-example {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        justify-content: center;
+        margin: 20px 0;
+    }
+    .enrich-from {
+        background: #f1f5f9;
+        border: 2px solid #cbd5e1;
+        border-radius: 12px;
+        padding: 16px 24px;
+        text-align: center;
+    }
+    .enrich-from h4 {
+        font-size: 14px;
+        font-weight: 700;
+        color: #334155;
+    }
+    .enrich-from p {
+        font-size: 11px;
+        color: #94a3b8;
+    }
+    .enrich-to {
+        background: #f0fdf4;
+        border: 2px solid #86efac;
+        border-radius: 12px;
+        padding: 16px 24px;
+    }
+    .enrich-to h4 {
+        font-size: 14px;
+        font-weight: 700;
+        color: #166534;
+    }
+    .enrich-to p {
+        font-size: 12px;
+        color: #475569;
+        line-height: 1.5;
+    }
+    .enrich-arrow {
+        font-size: 28px;
+        color: #86efac;
+        padding: 0 16px;
+    }
+
+    /* TABLE-LIKE DISPLAY */
+    .sheet-mock {
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 20px 0;
+    }
+    .sheet-mock-header {
+        display: grid;
+        grid-template-columns: 2fr 1.5fr 2fr 1fr 1fr 0.8fr;
+        gap: 0;
+        background: #f1f5f9;
+        border-bottom: 2px solid #e2e8f0;
+    }
+    .sheet-mock-header div {
+        padding: 10px 12px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        border-right: 1px solid #e2e8f0;
+    }
+    .sheet-mock-header div:last-child { border-right: none; }
+    .sheet-mock-row {
+        display: grid;
+        grid-template-columns: 2fr 1.5fr 2fr 1fr 1fr 0.8fr;
+        gap: 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .sheet-mock-row div {
+        padding: 10px 12px;
+        font-size: 11px;
+        color: #334155;
+        border-right: 1px solid #f1f5f9;
+    }
+    .sheet-mock-row div:last-child { border-right: none; }
+    .checkbox-cell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .mock-checkbox {
+        width: 16px;
+        height: 16px;
+        border: 2px solid #cbd5e1;
+        border-radius: 3px;
+        background: white;
+    }
+    .mock-checkbox.checked {
+        background: #3b82f6;
+        border-color: #3b82f6;
+        position: relative;
+    }
+    .mock-checkbox.checked::after {
+        content: '';
+        position: absolute;
+        left: 4px;
+        top: 1px;
+        width: 5px;
+        height: 9px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+
+    /* HUBSPOT DEAL CARD */
+    .deal-card {
+        background: white;
+        border: 2px solid #93c5fd;
+        border-left: 6px solid #3b82f6;
+        border-radius: 12px;
+        padding: 24px 28px;
+        margin: 20px auto;
+        max-width: 600px;
+    }
+    .deal-card h3 {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1e40af;
+        margin-bottom: 16px;
+        text-transform: none;
+        letter-spacing: 0;
+    }
+    .deal-props {
+        display: grid;
+        grid-template-columns: 140px 1fr;
+        gap: 6px 16px;
+    }
+    .deal-prop-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        padding: 4px 0;
+    }
+    .deal-prop-value {
+        font-size: 13px;
+        color: #0f172a;
+        font-weight: 500;
+        padding: 4px 0;
+    }
+    .deal-prop-value.priority-high {
+        color: #991b1b;
+        font-weight: 700;
+    }
+
+    /* AUTO VS MANUAL */
+    .auto-manual-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin: 20px 0;
+    }
+    .auto-col {
+        background: #f0fdf4;
+        border: 2px solid #86efac;
+        border-radius: 12px;
+        padding: 24px;
+    }
+    .auto-col h3 {
+        font-size: 14px;
+        font-weight: 700;
+        color: #166534;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 14px;
+    }
+    .manual-col {
+        background: #fff7ed;
+        border: 2px solid #fdba74;
+        border-radius: 12px;
+        padding: 24px;
+    }
+    .manual-col h3 {
+        font-size: 14px;
+        font-weight: 700;
+        color: #9a3412;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 14px;
+    }
+    .col-item {
+        font-size: 12px;
+        color: #334155;
+        line-height: 1.6;
+        padding: 6px 0;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .col-item:last-child { border-bottom: none; }
+    .col-item strong { color: #0f172a; }
+    .col-item .cost-tag {
+        font-size: 10px;
+        font-weight: 600;
+        padding: 2px 6px;
+        border-radius: 4px;
+        margin-left: 6px;
+    }
+    .cost-free {
+        background: #dcfce7;
+        color: #166534;
+    }
+    .cost-paid {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    /* COST BAR */
+    .cost-bar {
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 18px 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        margin: 20px 0;
+    }
+    .cost-item {
+        text-align: center;
+    }
+    .cost-amount {
+        font-size: 20px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+    .cost-label {
+        font-size: 11px;
+        color: #64748b;
+    }
+    .cost-plus {
+        font-size: 20px;
+        color: #cbd5e1;
+        font-weight: 300;
+    }
+    .cost-equals {
+        font-size: 20px;
+        color: #cbd5e1;
+        font-weight: 300;
+    }
+    .cost-total .cost-amount {
+        color: #166534;
+    }
+
+    /* NOTE */
+    .note {
+        font-size: 12px;
+        color: #64748b;
+        line-height: 1.6;
+        font-style: italic;
+        margin: 14px 0;
+        padding-left: 14px;
+        border-left: 3px solid #e2e8f0;
+    }
+
+    /* DIVIDER */
+    .divider {
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(to right, transparent, #cbd5e1, transparent);
+        margin: 40px 0;
+    }
+
+    /* FOOTER */
+    .footer {
+        text-align: center;
+        font-size: 12px;
+        color: #94a3b8;
+        margin-top: 60px;
+        padding-top: 20px;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    /* HOVER STATES */
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: default;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+    .card-green:hover { border-color: #22c55e; }
+    .card-blue:hover { border-color: #3b82f6; }
+    .card-orange:hover { border-color: #f97316; }
+    .card-purple:hover { border-color: #8b5cf6; }
+    .card-gray:hover { border-color: #94a3b8; }
+
+    .flow-step {
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .flow-step:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+        border-color: #93c5fd;
+    }
+
+    .deal-card {
+        transition: box-shadow 0.2s ease;
+    }
+    .deal-card:hover {
+        box-shadow: 0 8px 24px rgba(59,130,246,0.12);
+    }
+
+    .sheet-mock-row {
+        transition: background 0.15s ease;
+    }
+    .sheet-mock-row:hover {
+        background: #f8fafc;
+    }
+
+    .enrich-from, .enrich-to {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .enrich-from:hover, .enrich-to:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+    }
+
+    .auto-col, .manual-col {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .auto-col:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(34,197,94,0.1);
+    }
+    .manual-col:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(249,115,22,0.1);
+    }
+
+    .highlight-bar {
+        transition: box-shadow 0.2s ease;
+    }
+    .highlight-bar:hover {
+        box-shadow: 0 8px 32px rgba(15,23,42,0.2);
+    }
+
+    .gate {
+        transition: box-shadow 0.2s ease;
+    }
+    .gate:hover {
+        box-shadow: 0 8px 32px rgba(15,23,42,0.25);
+    }
+
+    .mock-checkbox {
+        transition: transform 0.15s ease;
+    }
+    .sheet-mock-row:hover .mock-checkbox {
+        transform: scale(1.15);
+    }
+
+    @media print {
+        body { padding: 20px; background: white; }
+        .section-header { margin-top: 30px; }
+    }
+    @media (max-width: 700px) {
+        .card-row, .card-row-4 { grid-template-columns: 1fr; }
+        .auto-manual-grid { grid-template-columns: 1fr; }
+        .sheet-mock-header, .sheet-mock-row { grid-template-columns: 1fr; }
+        .enrich-example { flex-direction: column; }
+        .enrich-arrow { transform: rotate(90deg); padding: 8px 0; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <div class="page-title">How Your Lead Generation System Works</div>
+    <div class="page-subtitle">Elmridge Carpentry &mdash; System Walkthrough</div>
+    <div class="page-date">April 2026</div>
+
+    <!-- ============================= -->
+    <!-- SECTION 1: DATA SOURCES       -->
+    <!-- ============================= -->
+    <div class="section-header">
+        <div class="section-num">1</div>
+        <h2>Where Do the Leads Come From?</h2>
+        <span class="section-badge badge-green">Automated</span>
+    </div>
+
+    <p style="font-size: 13px; color: #334155; line-height: 1.7; margin-bottom: 20px;">
+        Three separate scrapers pull construction project data from different sources. Each one runs on a schedule, filters out the noise, and writes clean leads into the Google Sheet.
+    </p>
+
+    <div class="card-row">
+        <div class="card card-green">
+            <h3>DataBid</h3>
+            <div class="stat-line">8</div>
+            <div class="stat-label">leads from 97 raw projects</div>
+            <p style="margin-top: 12px;">
+                Construction bidding platform. Scrapes weekly. Filters for multi-unit residential and commercial projects in Ontario. Excludes infrastructure, mechanical work, washroom renovations.
+            </p>
+        </div>
+        <div class="card card-green">
+            <h3>Ottawa Permits</h3>
+            <div class="stat-line">131</div>
+            <div class="stat-label">leads from 7,489 permits</div>
+            <p style="margin-top: 12px;">
+                City of Ottawa monthly construction permits. Filters for 4+ dwelling units, commercial builds. Excludes plumbing, electrical, roofing trades. All Ottawa = HIGH priority.
+            </p>
+        </div>
+        <div class="card card-green">
+            <h3>Ottawa DevApps</h3>
+            <div class="stat-line">241</div>
+            <div class="stat-label">leads from 763 applications</div>
+            <p style="margin-top: 12px;">
+                Development applications with owner identification. Downloads Application Summary PDFs from the city to extract the applicant and property owner names.
+            </p>
+        </div>
+    </div>
+
+    <div class="highlight-bar">
+        <p><strong>97% of these leads are companies you have never had in HubSpot.</strong><br>380 new opportunities from the first run alone. Zero overlap between the three sources.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ============================= -->
+    <!-- SECTION 2: ENRICHMENT         -->
+    <!-- ============================= -->
+    <div class="section-header">
+        <div class="section-num">2</div>
+        <h2>How Do Leads Get Contact Info?</h2>
+        <span class="section-badge badge-amber">Apollo</span>
+    </div>
+
+    <p style="font-size: 13px; color: #334155; line-height: 1.7; margin-bottom: 20px;">
+        The scrapers give us the company and the project. Apollo gives us the person to call. For each company, the script finds the right decision-maker and gets their verified work email.
+    </p>
+
+    <div class="flow-steps">
+        <div class="flow-step">
+            <h4>Step 1</h4>
+            <p>Search Apollo for decision-makers at the company: Project Manager, Estimator, VP Construction.</p>
+            <p style="margin-top: 8px; color: #166534; font-weight: 600; font-size: 10px;">FREE &mdash; no credits used</p>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-step">
+            <h4>Step 2</h4>
+            <p>Pick the best match by title. Project Manager beats Estimator beats Owner.</p>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-step highlighted">
+            <h4>Step 3</h4>
+            <p>Get their verified work email from Apollo.</p>
+            <p style="margin-top: 8px; color: #1e40af; font-weight: 600; font-size: 10px;">1 credit (~$0.12)</p>
+        </div>
+    </div>
+
+    <div class="enrich-example">
+        <div class="enrich-from">
+            <h4>Richcraft Homes</h4>
+            <p>Company name only</p>
+        </div>
+        <div class="enrich-arrow">&rarr;</div>
+        <div class="enrich-to">
+            <h4>Pavel Tiakmiakov</h4>
+            <p>Project Manager<br>ptiakmiakov@richcraft.com<br><span style="color: #166534; font-weight: 600;">Verified</span></p>
+        </div>
+    </div>
+
+    <div class="note">
+        313 contacts enriched so far. Runs only when triggered manually &mdash; no surprise credit charges on your Apollo account.
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ============================= -->
+    <!-- SECTION 3: THE GATE           -->
+    <!-- ============================= -->
+    <div class="section-header">
+        <div class="section-num">3</div>
+        <h2>The Quality Gate</h2>
+        <span class="section-badge badge-purple">Every 5 minutes</span>
+    </div>
+
+    <p style="font-size: 13px; color: #334155; line-height: 1.7; margin-bottom: 20px;">
+        Not every scraped lead is ready for your team. The gate checks four requirements before a lead can move forward. Incomplete leads stay in Raw Scraping until enrichment fills the gaps.
+    </p>
+
+    <div class="gate">
+        <h3>The Gate</h3>
+        <p>A lead must have all four to move from Raw Scraping to Qualified Leads.</p>
+        <div class="checklist">
+            <span class="check-item">&#10003; Company Name</span>
+            <span class="check-item">&#10003; Email or Phone</span>
+            <span class="check-item">&#10003; Project Address</span>
+            <span class="check-item">&#10003; Priority Level</span>
+        </div>
+        <p style="margin-top: 14px; font-size: 12px;">Runs automatically every 5 minutes. Complete leads are moved &mdash; not copied &mdash; to Qualified Leads.</p>
+    </div>
+
+    <div class="card-row-2">
+        <div class="card card-green">
+            <h3>Passes the Gate</h3>
+            <div class="deal-props" style="margin-top: 8px;">
+                <div class="deal-prop-label">Company</div>
+                <div class="deal-prop-value">Claridge Homes</div>
+                <div class="deal-prop-label">Email</div>
+                <div class="deal-prop-value">evan.mayfield@claridgehomes.com</div>
+                <div class="deal-prop-label">Address</div>
+                <div class="deal-prop-value">4755 Bank St, Ottawa</div>
+                <div class="deal-prop-label">Priority</div>
+                <div class="deal-prop-value priority-high">HIGH</div>
+            </div>
+            <p style="margin-top: 12px; color: #166534; font-weight: 600;">Moves to Qualified Leads</p>
+        </div>
+        <div class="card card-gray">
+            <h3>Waiting for Enrichment</h3>
+            <div class="deal-props" style="margin-top: 8px;">
+                <div class="deal-prop-label">Company</div>
+                <div class="deal-prop-value">Stonerise Construction</div>
+                <div class="deal-prop-label">Email</div>
+                <div class="deal-prop-value" style="color: #dc2626;">&mdash; missing &mdash;</div>
+                <div class="deal-prop-label">Address</div>
+                <div class="deal-prop-value" style="color: #dc2626;">&mdash; missing &mdash;</div>
+                <div class="deal-prop-label">Priority</div>
+                <div class="deal-prop-value" style="color: #dc2626;">&mdash; missing &mdash;</div>
+            </div>
+            <p style="margin-top: 12px; color: #64748b;">Stays in Raw Scraping until complete</p>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ============================= -->
+    <!-- SECTION 4: VA APPROVAL        -->
+    <!-- ============================= -->
+    <div class="section-header">
+        <div class="section-num">4</div>
+        <h2>How Does Your Team Approve Leads?</h2>
+        <span class="section-badge badge-amber">Human Review</span>
+    </div>
+
+    <p style="font-size: 13px; color: #334155; line-height: 1.7; margin-bottom: 20px;">
+        Leads that pass the gate land in the Qualified Leads tab. Your VA reviews each one. If it looks good, they tick the <strong>Push to HubSpot</strong> checkbox. Within 5 minutes, the lead is created in HubSpot and the row disappears from the spreadsheet. Only leads you approve enter your CRM.
+    </p>
+
+    <div class="sheet-mock">
+        <div class="sheet-mock-header">
+            <div>Company</div>
+            <div>Contact</div>
+            <div>Email</div>
+            <div>Priority</div>
+            <div>Status</div>
+            <div style="text-align: center;">Push</div>
+        </div>
+        <div class="sheet-mock-row">
+            <div style="font-weight: 600;">Claridge Homes</div>
+            <div>Evan Mayfield</div>
+            <div>evan.mayfield@claridgehomes.com</div>
+            <div><span style="color: #991b1b; font-weight: 700;">HIGH</span></div>
+            <div>Ready</div>
+            <div class="checkbox-cell"><div class="mock-checkbox checked"></div></div>
+        </div>
+        <div class="sheet-mock-row">
+            <div style="font-weight: 600;">Mattamy Homes</div>
+            <div>Sarah Chen</div>
+            <div>schen@mattamy.com</div>
+            <div><span style="color: #991b1b; font-weight: 700;">HIGH</span></div>
+            <div>Ready</div>
+            <div class="checkbox-cell"><div class="mock-checkbox"></div></div>
+        </div>
+        <div class="sheet-mock-row">
+            <div style="font-weight: 600;">PCL Construction</div>
+            <div>James Ford</div>
+            <div>jford@pcl.com</div>
+            <div><span style="color: #92400e; font-weight: 600;">MEDIUM</span></div>
+            <div>Ready</div>
+            <div class="checkbox-cell"><div class="mock-checkbox"></div></div>
+        </div>
+    </div>
+
+    <div class="note">
+        Tick the checkbox, and the lead flows to HubSpot automatically. The row is then removed from the spreadsheet &mdash; it now lives in HubSpot. No duplicates, no manual data entry.
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ============================= -->
+    <!-- SECTION 5: HUBSPOT            -->
+    <!-- ============================= -->
+    <div class="section-header">
+        <div class="section-num">5</div>
+        <h2>What Lands in HubSpot?</h2>
+        <span class="section-badge badge-blue">HubSpot</span>
+    </div>
+
+    <p style="font-size: 13px; color: #334155; line-height: 1.7; margin-bottom: 20px;">
+        Each approved lead becomes a deal in HubSpot's Lead Pipeline v2 with all properties filled in. A contact is created and linked to the deal automatically.
+    </p>
+
+    <div class="deal-card">
+        <h3>CLARIDGE HOMES &mdash; 4755 BANK ST, Ottawa, ON</h3>
+        <div class="deal-props">
+            <div class="deal-prop-label">Pipeline</div>
+            <div class="deal-prop-value">Lead Pipeline v2</div>
+            <div class="deal-prop-label">Stage</div>
+            <div class="deal-prop-value">New Lead</div>
+            <div class="deal-prop-label">Priority</div>
+            <div class="deal-prop-value priority-high">HIGH</div>
+            <div class="deal-prop-label">Source</div>
+            <div class="deal-prop-value">Ottawa Permits</div>
+            <div class="deal-prop-label">Construction Stage</div>
+            <div class="deal-prop-value">Permits Approved</div>
+            <div class="deal-prop-label">Amount</div>
+            <div class="deal-prop-value">$2,128,715</div>
+            <div class="deal-prop-label">Contact</div>
+            <div class="deal-prop-value">Evan Mayfield (evan.mayfield@claridgehomes.com)</div>
+        </div>
+    </div>
+
+    <p style="font-size: 13px; color: #334155; line-height: 1.7; text-align: center;">
+        From here, your SDR calls and emails. Jerry drives to HIGH priority sites.<br>Abdul manages bids. The automation feeds the top of the funnel &mdash; your team works the deals.
+    </p>
+
+    <div class="divider"></div>
+
+    <!-- ============================= -->
+    <!-- SECTION 6: AUTO VS MANUAL     -->
+    <!-- ============================= -->
+    <div class="section-header">
+        <div class="section-num">6</div>
+        <h2>What Runs Automatically vs What Is Manual?</h2>
+    </div>
+
+    <div class="auto-manual-grid">
+        <div class="auto-col">
+            <h3>Automatic</h3>
+            <div class="col-item">
+                <strong>DataBid scraper</strong> &mdash; runs weekly
+                <span class="cost-tag cost-free">FREE</span>
+            </div>
+            <div class="col-item">
+                <strong>Ottawa Permits scraper</strong> &mdash; runs monthly
+                <span class="cost-tag cost-free">FREE</span>
+            </div>
+            <div class="col-item">
+                <strong>Ottawa DevApps scraper</strong> &mdash; runs monthly
+                <span class="cost-tag cost-free">FREE</span>
+            </div>
+            <div class="col-item">
+                <strong>Quality gate</strong> &mdash; checks every 5 minutes
+                <span class="cost-tag cost-free">FREE</span>
+            </div>
+            <div class="col-item">
+                <strong>HubSpot push</strong> &mdash; when checkbox is ticked
+                <span class="cost-tag cost-free">FREE</span>
+            </div>
+        </div>
+        <div class="manual-col">
+            <h3>Manual</h3>
+            <div class="col-item">
+                <strong>Apollo enrichment</strong> &mdash; triggered by Victor
+                <span class="cost-tag cost-paid">~$0.12 / CONTACT</span>
+                <p style="font-size: 11px; color: #9a3412; margin-top: 4px;">Only runs when you want it to. No surprise charges.</p>
+            </div>
+            <div class="col-item">
+                <strong>VA checkbox approval</strong> &mdash; human review required
+                <span class="cost-tag cost-free">FREE</span>
+                <p style="font-size: 11px; color: #9a3412; margin-top: 4px;">Your team decides what enters HubSpot. Nothing is pushed without approval.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="cost-bar">
+        <div class="cost-item">
+            <div class="cost-amount">$49</div>
+            <div class="cost-label">Apollo / month</div>
+        </div>
+        <div class="cost-plus">+</div>
+        <div class="cost-item">
+            <div class="cost-amount">$5&ndash;15</div>
+            <div class="cost-label">Cloud server / month</div>
+        </div>
+        <div class="cost-equals">=</div>
+        <div class="cost-item cost-total">
+            <div class="cost-amount">~$64</div>
+            <div class="cost-label">Total monthly cost</div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ============================= -->
+    <!-- SECTION 7: WHAT'S NEXT        -->
+    <!-- ============================= -->
+    <div class="section-header">
+        <div class="section-num">7</div>
+        <h2>What Is Next?</h2>
+    </div>
+
+    <p style="font-size: 13px; color: #334155; line-height: 1.7; margin-bottom: 20px;">
+        The Ottawa pipeline is live. These are the expansions available to increase the volume and geographic reach of leads coming in.
+    </p>
+
+    <div class="card-row-4">
+        <div class="card card-blue">
+            <h3>Toronto / GTA Permits</h3>
+            <p>Same scraping for the Greater Toronto Area. Toronto has 3 to 4 times the construction volume of Ottawa. Same filters, same pipeline, just more opportunities hitting the sheet.</p>
+        </div>
+        <div class="card card-blue">
+            <h3>Rockland / Surrounding Ottawa</h3>
+            <p>Expand to nearby municipalities and surrounding areas. Separate data sources that need to be researched and built.</p>
+        </div>
+        <div class="card card-purple">
+            <h3>LinkedIn Sales Navigator</h3>
+            <p>Process saved search exports for additional contact enrichment. Supplements Apollo with LinkedIn activity data and mutual connections.</p>
+        </div>
+        <div class="card card-green">
+            <h3>Cloud Server</h3>
+            <p>Move scrapers to a dedicated server that runs 24/7 without depending on a local computer. Ensures the schedule never misses a run.</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        Elmridge Carpentry &mdash; Lead Generation System &mdash; Built by Victor Ballivian
+    </div>
+
+</div>
+</body>
+</html>

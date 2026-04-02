@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+        background: #f8fafc;
+        color: #1a1a1a;
+        padding: 40px;
+    }
+    .container { max-width: 1000px; margin: 0 auto; }
+
+    .page-title {
+        text-align: center;
+        font-size: 28px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 6px;
+    }
+    .page-subtitle {
+        text-align: center;
+        font-size: 14px;
+        color: #64748b;
+        margin-bottom: 12px;
+    }
+    .page-date {
+        text-align: center;
+        font-size: 12px;
+        color: #94a3b8;
+        margin-bottom: 50px;
+    }
+
+    /* PIPELINE OVERVIEW */
+    .pipeline-flow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        margin: 30px 0 50px 0;
+        flex-wrap: wrap;
+    }
+    .pipeline-step {
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 16px 20px;
+        text-align: center;
+        min-width: 150px;
+        max-width: 180px;
+    }
+    .pipeline-step h4 {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #0f172a;
+        margin-bottom: 4px;
+    }
+    .pipeline-step p {
+        font-size: 11px;
+        color: #64748b;
+        line-height: 1.4;
+    }
+    .pipeline-step.active {
+        border-color: #3b82f6;
+        background: #eff6ff;
+    }
+    .pipeline-arrow {
+        font-size: 20px;
+        color: #cbd5e1;
+        padding: 0 6px;
+    }
+
+    /* SECTION HEADERS */
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        margin-top: 50px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #f1f5f9;
+    }
+    .section-header h2 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+    .section-badge {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .badge-live { background: #dcfce7; color: #166534; }
+    .badge-ready { background: #dbeafe; color: #1e40af; }
+    .badge-blocked { background: #fee2e2; color: #991b1b; }
+    .badge-pending { background: #fef3c7; color: #92400e; }
+
+    /* AUTOMATION CARDS */
+    .auto-card {
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 28px 32px;
+        margin-bottom: 24px;
+    }
+    .auto-card.live { border-left: 5px solid #22c55e; }
+    .auto-card.ready { border-left: 5px solid #3b82f6; }
+    .auto-card.blocked { border-left: 5px solid #ef4444; }
+
+    .auto-card h3 {
+        font-size: 17px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 4px;
+    }
+    .auto-card .auto-subtitle {
+        font-size: 13px;
+        color: #64748b;
+        margin-bottom: 16px;
+    }
+    .auto-card .auto-desc {
+        font-size: 13px;
+        color: #334155;
+        line-height: 1.7;
+        margin-bottom: 16px;
+    }
+
+    /* DETAIL ROWS */
+    .detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+    .detail-box {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 14px 16px;
+    }
+    .detail-box .label {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #94a3b8;
+        margin-bottom: 4px;
+    }
+    .detail-box .value {
+        font-size: 13px;
+        color: #0f172a;
+        font-weight: 500;
+    }
+
+    /* FILTER SECTION */
+    .filter-section {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 20px 24px;
+        margin-top: 12px;
+    }
+    .filter-section h4 {
+        font-size: 13px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 12px;
+    }
+    .filter-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 8px;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+    .filter-icon {
+        flex-shrink: 0;
+        width: 20px;
+        text-align: center;
+        font-size: 13px;
+    }
+    .filter-icon.include { color: #16a34a; }
+    .filter-icon.exclude { color: #dc2626; }
+    .filter-text { color: #334155; }
+    .filter-text strong { color: #0f172a; font-weight: 600; }
+
+    /* TAG LIST */
+    .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 6px;
+    }
+    .tag {
+        font-size: 10px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 6px;
+        letter-spacing: 0.3px;
+    }
+    .tag-green { background: #dcfce7; color: #166534; }
+    .tag-red { background: #fee2e2; color: #991b1b; }
+    .tag-blue { background: #dbeafe; color: #1e40af; }
+    .tag-amber { background: #fef3c7; color: #92400e; }
+    .tag-gray { background: #f1f5f9; color: #475569; }
+
+    /* STATS ROW */
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin: 24px 0;
+    }
+    .stat-box {
+        background: white;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 16px;
+        text-align: center;
+    }
+    .stat-box .stat-number {
+        font-size: 28px;
+        font-weight: 800;
+        color: #0f172a;
+    }
+    .stat-box .stat-label {
+        font-size: 11px;
+        color: #64748b;
+        font-weight: 500;
+        margin-top: 2px;
+    }
+
+    /* PRIORITY TABLE */
+    .priority-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        margin-top: 12px;
+    }
+    .priority-table th {
+        background: #0f172a;
+        color: white;
+        padding: 10px 14px;
+        text-align: left;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .priority-table td {
+        padding: 10px 14px;
+        border-bottom: 1px solid #e2e8f0;
+        color: #334155;
+    }
+    .priority-table tr:nth-child(even) { background: #f8fafc; }
+
+    .priority-high { color: #dc2626; font-weight: 700; }
+    .priority-medium { color: #d97706; font-weight: 700; }
+    .priority-low { color: #2563eb; font-weight: 700; }
+
+    /* SCHEDULE */
+    .schedule-grid {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 0;
+        font-size: 12px;
+        margin-top: 12px;
+    }
+    .schedule-day {
+        padding: 10px 14px;
+        font-weight: 700;
+        color: #0f172a;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    .schedule-task {
+        padding: 10px 14px;
+        color: #334155;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    /* NOTES */
+    .note {
+        background: #fffbeb;
+        border: 1px solid #fde68a;
+        border-radius: 10px;
+        padding: 14px 18px;
+        font-size: 12px;
+        color: #92400e;
+        line-height: 1.6;
+        margin-top: 12px;
+    }
+
+    .footer {
+        text-align: center;
+        margin-top: 60px;
+        padding-top: 20px;
+        border-top: 1px solid #e2e8f0;
+        font-size: 11px;
+        color: #94a3b8;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+
+    <div class="page-title">Lead Generation Automation</div>
+    <div class="page-subtitle">Elmridge Carpentry &mdash; Phase 2 Deliverable</div>
+    <div class="page-date">Prepared March 2026</div>
+
+    <!-- PIPELINE OVERVIEW -->
+    <div class="pipeline-flow">
+        <div class="pipeline-step active">
+            <h4>Data Sources</h4>
+            <p>DataBid, Permits, DevApps</p>
+        </div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-step">
+            <h4>Raw Scraping</h4>
+            <p>Google Sheets tab</p>
+        </div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-step">
+            <h4>Enrichment</h4>
+            <p>Apollo API</p>
+        </div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-step">
+            <h4>Qualification</h4>
+            <p>VA reviews</p>
+        </div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-step">
+            <h4>HubSpot</h4>
+            <p>Lead Pipeline v2</p>
+        </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+        <div class="stat-box">
+            <div class="stat-number">6</div>
+            <div class="stat-label">Scripts Built</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">4</div>
+            <div class="stat-label">Data Sources</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">380+</div>
+            <div class="stat-label">Leads in Sheet</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">~$64</div>
+            <div class="stat-label">Monthly Cost</div>
+        </div>
+    </div>
+
+    <!-- ===================== -->
+    <!-- DATABID               -->
+    <!-- ===================== -->
+    <div class="section-header">
+        <h2>1. DataBid Project Scraper</h2>
+        <span class="section-badge badge-live">Live</span>
+    </div>
+
+    <div class="auto-card live">
+        <h3>scrape_databid.py</h3>
+        <div class="auto-subtitle">Automated extraction from DataBid's internal API</div>
+
+        <div class="auto-desc">
+            Logs into DataBid using Playwright (headless browser), extracts session cookies, then queries the internal REST API directly for project data. No fragile DOM scraping &mdash; this uses the same endpoints the DataBid dashboard uses internally.
+        </div>
+
+        <div class="detail-grid">
+            <div class="detail-box">
+                <div class="label">API Endpoints</div>
+                <div class="value">getDueProjects (87 projects)<br>getRecentProjects (43 projects)</div>
+            </div>
+            <div class="detail-box">
+                <div class="label">Regions</div>
+                <div class="value">Eastern Ontario + Southern Ontario</div>
+            </div>
+            <div class="detail-box">
+                <div class="label">Schedule</div>
+                <div class="value">Weekly (Sunday night)</div>
+            </div>
+            <div class="detail-box">
+                <div class="label">Output</div>
+                <div class="value">Raw Scraping Results tab in Google Sheets</div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <h4>Filters Applied</h4>
+
+            <p style="font-size: 12px; color: #64748b; margin-bottom: 14px;">
+                Patrick's criteria: <em>"anything multi-unit, multi-level, multiplex type stuff"</em> &mdash; buildings where developers and GCs need carpentry subcontractors for baseboard, casing, doors, and framing.
+            </p>
+
+            <div class="filter-row">
+                <div class="filter-icon include">&#10003;</div>
+                <div class="filter-text"><strong>Project Class:</strong> General Building only</div>
+            </div>
+            <div class="filter-row">
+                <div class="filter-icon exclude">&#10005;</div>
+                <div class="filter-text"><strong>Excluded classes:</strong> Heavy/Civil (roads, sewers, utilities), Professional Consulting, Supply/Maintenance, Individual Trades</div>
+            </div>
+
+            <div style="height: 10px;"></div>
+
+            <div class="filter-row">
+                <div class="filter-icon include">&#10003;</div>
+                <div class="filter-text"><strong>Industries kept:</strong></div>
+            </div>
+            <div class="tag-list" style="margin-left: 30px; margin-bottom: 12px;">
+                <span class="tag tag-green">Residential</span>
+                <span class="tag tag-green">Commercial</span>
+                <span class="tag tag-green">Educational</span>
+                <span class="tag tag-green">Medical</span>
+            </div>
+
+            <div class="filter-row">
+                <div class="filter-icon exclude">&#10005;</div>
+                <div class="filter-text"><strong>Industries excluded:</strong></div>
+            </div>
+            <div class="tag-list" style="margin-left: 30px; margin-bottom: 12px;">
+                <span class="tag tag-red">Heavy/Highway/Utilities</span>
+                <span class="tag tag-red">Power Generation</span>
+                <span class="tag tag-red">Transportation</span>
+                <span class="tag tag-red">Outdoor Light/Power</span>
+            </div>
+
+            <div style="height: 10px;"></div>
+
+            <div class="filter-row">
+                <div class="filter-icon exclude">&#10005;</div>
+                <div class="filter-text"><strong>Keyword exclusions</strong> (removed even if General Building):</div>
+            </div>
+            <div class="tag-list" style="margin-left: 30px; margin-bottom: 12px;">
+                <span class="tag tag-gray">pump station</span>
+                <span class="tag tag-gray">sewage</span>
+                <span class="tag tag-gray">ventilation</span>
+                <span class="tag tag-gray">hvac</span>
+                <span class="tag tag-gray">heating pump</span>
+                <span class="tag tag-gray">rooftop unit</span>
+                <span class="tag tag-gray">roof replacement</span>
+                <span class="tag tag-gray">window program</span>
+                <span class="tag tag-gray">fenestration</span>
+                <span class="tag tag-gray">solar / generator</span>
+                <span class="tag tag-gray">elevator</span>
+                <span class="tag tag-gray">fire alarm</span>
+                <span class="tag tag-gray">transit stop</span>
+                <span class="tag tag-gray">paving / asphalt</span>
+            </div>
+
+            <div style="height: 10px;"></div>
+
+            <div class="filter-row">
+                <div class="filter-icon include">&#10003;</div>
+                <div class="filter-text"><strong>Boost keywords</strong> (always kept regardless of industry):</div>
+            </div>
+            <div class="tag-list" style="margin-left: 30px;">
+                <span class="tag tag-blue">residential</span>
+                <span class="tag tag-blue">condo</span>
+                <span class="tag tag-blue">apartment</span>
+                <span class="tag tag-blue">townhouse</span>
+                <span class="tag tag-blue">multi-unit</span>
+                <span class="tag tag-blue">mixed-use</span>
+                <span class="tag tag-blue">new school</span>
+                <span class="tag tag-blue">renovation</span>
+                <span class="tag tag-blue">community centre</span>
+                <span class="tag tag-blue">housing</span>
+                <span class="tag tag-blue">hospital</span>
+                <span class="tag tag-blue">hotel</span>
+                <span class="tag tag-blue">office</span>
+                <span class="tag tag-blue">framing</span>
+            </div>
+        </div>
+
+        <div class="note">
+            First run pulled 130 raw projects from the API. After filtering: 20 relevant leads written to the sheet. The other 110 were infrastructure, mechanical work, or consulting &mdash; not carpentry opportunities.
+        </div>
+    </div>
+
+    <!-- ===================== -->
+    <!-- PERMITS               -->
+    <!-- ===================== -->
+    <div class="section-header">
+        <h2>2. Ottawa Permits Scraper</h2>
+        <span class="section-badge badge-live">Live</span>
+    </div>
+
+    <div class="auto-card live">
+        <h3>scrape_permits.py</h3>
+        <div class="auto-subtitle">City of Ottawa monthly construction permit data (open.ottawa.ca)</div>
+
+        <div class="auto-desc">
+            Downloads the monthly Excel file from Ottawa's ArcGIS open data portal automatically. Processes 7,489 permit records from 2024-2025, filters for multi-unit residential (4+ DU) and commercial construction, groups by contractor (one lead per company), and writes to the Google Sheet.
+        </div>
+
+        <div class="detail-grid">
+            <div class="detail-box">
+                <div class="label">Data Source</div>
+                <div class="value">open.ottawa.ca via ArcGIS API<br>Auto-download with --fetch flag</div>
+            </div>
+            <div class="detail-box">
+                <div class="label">Raw Records</div>
+                <div class="value">7,489 permits (2024-2025 dataset)</div>
+            </div>
+            <div class="detail-box">
+                <div class="label">Schedule</div>
+                <div class="value">Monthly (1st of month)</div>
+            </div>
+            <div class="detail-box">
+                <div class="label">Output</div>
+                <div class="value">Raw Scraping Results tab<br>All HIGH priority (Ottawa = drive-to)</div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <h4>Filters Applied</h4>
+
+            <p style="font-size: 12px; color: #64748b; margin-bottom: 14px;">
+                Patrick highlighted permits as especially valuable for the framing expansion (8-40 unit builds): <em>"if we can see where permits are being approved, we can physically go to that site"</em>
+            </p>
+
+            <div class="filter-row">
+                <div class="filter-icon include">&#10003;</div>
+                <div class="filter-text"><strong>Multi-unit residential:</strong> 4+ dwelling units (rowhouses, stacked rowhouses, apartments)</div>
+            </div>
+            <div class="filter-row">
+                <div class="filter-icon include">&#10003;</div>
+                <div class="filter-text"><strong>Commercial/Institutional:</strong> tenant fit-ups, new construction, renovations with interior work</div>
+            </div>
+            <div class="filter-row">
+                <div class="filter-icon include">&#10003;</div>
+                <div class="filter-text"><strong>Grouped by contractor:</strong> one row per company, largest project selected</div>
+            </div>
+
+            <div style="height: 10px;"></div>
+
+            <div class="filter-row">
+                <div class="filter-icon exclude">&#10005;</div>
+                <div class="filter-text"><strong>Excluded permit types:</strong></div>
+            </div>
+            <div class="tag-list" style="margin-left: 30px; margin-bottom: 12px;">
+                <span class="tag tag-red">Demolitions</span>
+                <span class="tag tag-red">Pools</span>
+                <span class="tag tag-red">Single-family (DU &lt; 4)</span>
+                <span class="tag tag-red">Semi-detached (DU 2-3)</span>
+            </div>
+
+            <div class="filter-row">
+                <div class="filter-icon exclude">&#10005;</div>
+                <div class="filter-text"><strong>Excluded descriptions:</strong></div>
+            </div>
+            <div class="tag-list" style="margin-left: 30px; margin-bottom: 12px;">
+                <span class="tag tag-gray">plumbing only</span>
+                <span class="tag tag-gray">electrical only</span>
+                <span class="tag tag-gray">mechanical only</span>
+                <span class="tag tag-gray">fire alarm</span>
+                <span class="tag tag-gray">sprinkler</span>
+                <span class="tag tag-gray">elevator</span>
+                <span class="tag tag-gray">hvac</span>
+                <span class="tag tag-gray">roofing</span>
+                <span class="tag tag-gray">solar / generator</span>
+                <span class="tag tag-gray">parking / paving</span>
+                <span class="tag tag-gray">backflow prevention</span>
+            </div>
+
+            <div class="filter-row">
+                <div class="filter-icon exclude">&#10005;</div>
+                <div class="filter-text"><strong>Excluded contractor types</strong> (trade subs, not developers/GCs):</div>
+            </div>
+            <div class="tag-list" style="margin-left: 30px; margin-bottom: 12px;">
+                <span class="tag tag-gray">plumbing</span>
+                <span class="tag tag-gray">electrical</span>
+                <span class="tag tag-gray">hvac / heating</span>
+                <span class="tag tag-gray">mechanical</span>
+                <span class="tag tag-gray">glass / glazing</span>
+                <span class="tag tag-gray">roofing</span>
+                <span class="tag tag-gray">painting</span>
+                <span class="tag tag-gray">landscaping</span>
+            </div>
+
+            <div class="filter-row">
+                <div class="filter-icon include">&#10003;</div>
+                <div class="filter-text"><strong>All Ottawa permits = HIGH priority.</strong> Patrick's team (Jerry) physically drives to these sites.</div>
+            </div>
+        </div>
+
+        <div class="note">
+            First run: 7,489 raw permits &rarr; 138 unique contractors after filtering &rarr; 131 new leads written to sheet (7 already existed from DataBid). Top contractors: Richcraft Homes, Falsetto Homes, Claridge Homes, Taggart, Mattamy.
+        </div>
+    </div>
+
+    <!-- ===================== -->
+    <!-- DEV APPLICATIONS      -->
+    <!-- ===================== -->
+    <div class="section-header">
+        <h2>3. Development Applications Scraper</h2>
+        <span class="section-badge badge-live">Live</span>
+    </div>
+
+    <div class="auto-card live">
+        <h3>scrape_devapps.py</h3>
+        <div class="auto-subtitle">Ottawa development applications with applicant/owner identification (devapps.ottawa.ca)</div>
+
+        <div class="auto-desc">
+            This is the answer to Patrick's key question from Call 4: <em>"We got to find a way to find out who the owner is... who's getting these permits approved."</em> The City of Ottawa publishes development applications (zoning amendments, site plans, subdivisions) through a public REST API. Each application has an Application Summary PDF that names the <strong>applicant and property owner</strong>.
+        </div>
+
+        <div class="detail-grid">
+            <div class="detail-box">
+                <div class="label">Data Source</div>
+                <div class="value">devapps.ottawa.ca REST API<br>Public, no login required</div>
+            </div>
+            <div class="detail-box">
+                <div class="label">Total Applications</div>
+                <div class="value">919 active development applications<br>763 relevant types (site plan, zoning, subdivision)</div>
+            </div>
+            <div class="detail-box">
+                <div class="label">Owner Extraction</div>
+                <div class="value">Application Summary PDFs<br>~50% have PDFs with applicant/owner names</div>
+            </div>
+            <div class="detail-box">
+                <div class="label">Schedule</div>
+                <div class="value">Monthly (new applications appear regularly)</div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <h4>How It Works</h4>
+            <div class="filter-row">
+                <div class="filter-icon" style="color: #0f172a;">1.</div>
+                <div class="filter-text">Fetches all dev applications from the REST API (919 records)</div>
+            </div>
+            <div class="filter-row">
+                <div class="filter-icon" style="color: #0f172a;">2.</div>
+                <div class="filter-text">Filters to Site Plan Control, Zoning Amendments, Subdivisions, Condominiums</div>
+            </div>
+            <div class="filter-row">
+                <div class="filter-icon" style="color: #0f172a;">3.</div>
+                <div class="filter-text">Fetches detail for each application + downloads Application Summary PDF</div>
+            </div>
+            <div class="filter-row">
+                <div class="filter-icon" style="color: #0f172a;">4.</div>
+                <div class="filter-text">Extracts <strong>Applicant</strong> and <strong>Owner</strong> names from PDF (e.g., "Keeper Co. c/o Bridgette Alchawa", "1850591 Ontario Ltd.")</div>
+            </div>
+            <div class="filter-row">
+                <div class="filter-icon" style="color: #0f172a;">5.</div>
+                <div class="filter-text">Includes city planner contact + project description in notes for outreach context</div>
+            </div>
+        </div>
+
+        <div class="note">
+            First run: 763 applications processed &rarr; 626 PDFs parsed &rarr; <strong>241 new leads</strong> with identified owners/developers written to the sheet. These are <strong>planning-stage projects</strong> &mdash; the earliest signal available. Combined with permits (construction-stage) and DataBid (pre-construction), Patrick's team can see projects at every stage of the pipeline.
+        </div>
+    </div>
+
+    <!-- ===================== -->
+    <!-- ENRICHMENT            -->
+    <!-- ===================== -->
+    <div class="section-header">
+        <h2>4. Contact Enrichment</h2>
+        <span class="section-badge badge-live">Live</span>
+    </div>
+
+    <div class="auto-card live">
+        <h3>enrich_leads.py</h3>
+        <div class="auto-subtitle">Apollo API &mdash; find decision-makers at each company</div>
+
+        <div class="auto-desc">
+            Two-step strategy to minimize credit usage. Step 1 (free): search Apollo for people at the company matching target titles. Step 2 (1 credit): enrich the best contact to get email and phone. Only the top contact per company is enriched.
+        </div>
+
+        <div class="detail-grid">
+            <div class="detail-box">
+                <div class="label">Target Titles</div>
+                <div class="value">Project Manager, Estimator, VP Construction, Procurement Manager, Owner</div>
+            </div>
+            <div class="detail-box">
+                <div class="label">Credit Usage</div>
+                <div class="value">~1 credit per company<br>~416 credits/month on Basic</div>
+            </div>
+            <div class="detail-box">
+                <div class="label">Schedule</div>
+                <div class="value">Daily on weekdays</div>
+            </div>
+            <div class="detail-box">
+                <div class="label">Cost</div>
+                <div class="value">$49/month (Apollo Basic)</div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <h4>How It Works</h4>
+            <div class="filter-row">
+                <div class="filter-icon" style="color: #0f172a;">1.</div>
+                <div class="filter-text">Reads Raw Scraping Results for rows with Status="New" and missing contact info</div>
+            </div>
+            <div class="filter-row">
+                <div class="filter-icon" style="color: #0f172a;">2.</div>
+                <div class="filter-text"><strong>Free search:</strong> Apollo People Search returns names, titles, LinkedIn URLs (no credits)</div>
+            </div>
+            <div class="filter-row">
+                <div class="filter-icon" style="color: #0f172a;">3.</div>
+                <div class="filter-text">Picks best contact by title priority (PM &gt; Estimator &gt; VP &gt; Owner)</div>
+            </div>
+            <div class="filter-row">
+                <div class="filter-icon" style="color: #0f172a;">4.</div>
+                <div class="filter-text"><strong>Paid enrichment:</strong> Gets email + phone for top contact only (1 credit)</div>
+            </div>
+            <div class="filter-row">
+                <div class="filter-icon" style="color: #0f172a;">5.</div>
+                <div class="filter-text">Updates the sheet row with Contact Name, Title, Email, Phone, LinkedIn</div>
+            </div>
+        </div>
+
+        <div class="note">
+            First run: enriched 313 leads (84 new scraped + 229 HubSpot legacy warm/hot). 292 Apollo credits used. Hit rate: 69% for established companies, 22% for smaller local builders. Runs automatically Mon-Fri at 6am.
+        </div>
+    </div>
+
+    <!-- ===================== -->
+    <!-- HUBSPOT PUSH          -->
+    <!-- ===================== -->
+    <div class="section-header">
+        <h2>5. HubSpot Push</h2>
+        <span class="section-badge badge-ready">Ready</span>
+    </div>
+
+    <div class="auto-card ready">
+        <h3>push_to_hubspot.py</h3>
+        <div class="auto-subtitle">Qualified leads into HubSpot Lead Pipeline v2</div>
+
+        <div class="auto-desc">
+            Reads the Qualified Leads tab for rows marked Status="Ready", creates deals in HubSpot's Lead Pipeline v2 at the "New Lead" stage, creates and associates contacts if email is available, and marks the row as pushed.
+        </div>
+
+        <div class="detail-grid">
+            <div class="detail-box">
+                <div class="label">Pipeline</div>
+                <div class="value">Lead Pipeline v2 &rarr; New Lead stage</div>
+            </div>
+            <div class="detail-box">
+                <div class="label">Dedup</div>
+                <div class="value">Checks HubSpot for existing deal before creating</div>
+            </div>
+            <div class="detail-box">
+                <div class="label">Properties Set</div>
+                <div class="value">Priority, Lead Source, Project Address, Construction Stage, Amount</div>
+            </div>
+            <div class="detail-box">
+                <div class="label">Schedule</div>
+                <div class="value">On demand (after VA reviews)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== -->
+    <!-- LINKEDIN              -->
+    <!-- ===================== -->
+    <div class="section-header">
+        <h2>6. LinkedIn Sales Navigator</h2>
+        <span class="section-badge badge-pending">Phase 3</span>
+    </div>
+
+    <div class="auto-card" style="border-left: 5px solid #d97706;">
+        <h3>scrape_linkedin.py</h3>
+        <div class="auto-subtitle">Optional contact enrichment layer (supplements Apollo)</div>
+
+        <div class="auto-desc">
+            Processes CSV exports from LinkedIn Sales Navigator. Does not scrape LinkedIn directly to avoid account ban risk. The team exports leads from Sales Navigator, drops the CSV into the data/linkedin/ folder, and this script processes it into the Raw Scraping Results tab.
+        </div>
+
+        <div class="filter-section">
+            <h4>How it fits the pipeline</h4>
+
+            <p style="font-size: 12px; color: #334155; margin-bottom: 14px; line-height: 1.7;">
+                Sales Navigator is <strong>not for finding projects</strong> &mdash; DataBid and Ottawa Permits already handle that. It's a second way to find <strong>decision-makers at companies we already know about</strong>, supplementing Apollo.
+            </p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 14px;">
+                <div style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px;">
+                    <div style="font-size: 11px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Apollo (Primary enrichment)</div>
+                    <div style="font-size: 12px; color: #334155; line-height: 1.6;">
+                        Automated via API<br>
+                        Runs daily, no manual work<br>
+                        Returns email + phone<br>
+                        1 credit per contact (~416/mo)
+                    </div>
+                </div>
+                <div style="background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px;">
+                    <div style="font-size: 11px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Sales Navigator (Optional add-on)</div>
+                    <div style="font-size: 12px; color: #334155; line-height: 1.6;">
+                        Manual CSV export<br>
+                        Higher quality &mdash; see activity, mutual connections<br>
+                        Better for warm outreach style<br>
+                        Can spot development announcements in posts
+                    </div>
+                </div>
+            </div>
+
+            <p style="font-size: 12px; color: #64748b; line-height: 1.6;">
+                Patrick's outreach style is referencing a specific project: <em>"Hey, I've come across your project at so-and-so street... Just CC us when you send out your tender package."</em> Sales Navigator lets you see who at Richcraft or Claridge is active on LinkedIn and tailor the approach &mdash; but Apollo already gets you the contact info to make that call.
+            </p>
+        </div>
+
+        <div class="note">
+            Recommended: start with Apollo enrichment alone (included in Phase 2). Add Sales Navigator as a Phase 3 upgrade once the core pipeline is generating outreach-ready leads. Script is already built and ready.
+        </div>
+    </div>
+
+    <!-- ===================== -->
+    <!-- PRIORITY SYSTEM       -->
+    <!-- ===================== -->
+    <div class="section-header">
+        <h2>Priority Classification</h2>
+    </div>
+
+    <table class="priority-table">
+        <thead>
+            <tr>
+                <th>Priority</th>
+                <th>Trigger</th>
+                <th>Response Time</th>
+                <th>Assigned To</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="priority-high">HIGH</td>
+                <td>Excavation, crane on site, breaking ground, Ottawa area</td>
+                <td>24 hours</td>
+                <td>Jerry (physical site visit or call)</td>
+            </tr>
+            <tr>
+                <td class="priority-medium">MEDIUM</td>
+                <td>Permits approved, pre-construction, Ontario (not Ottawa)</td>
+                <td>1 week</td>
+                <td>SDR / VA</td>
+            </tr>
+            <tr>
+                <td class="priority-low">LOW</td>
+                <td>Planning, zoning, early stage</td>
+                <td>2 weeks</td>
+                <td>SDR / VA</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- ===================== -->
+    <!-- SCHEDULE              -->
+    <!-- ===================== -->
+    <div class="section-header">
+        <h2>Automation Schedule</h2>
+    </div>
+
+    <div style="background: white; border: 2px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+        <div class="schedule-grid">
+            <div class="schedule-day">Sunday</div>
+            <div class="schedule-task">DataBid scraper runs (scrape_databid.py)</div>
+            <div class="schedule-day">Mon &ndash; Fri</div>
+            <div class="schedule-task">Apollo enrichment runs (enrich_leads.py)</div>
+            <div class="schedule-day">Mon + Thu</div>
+            <div class="schedule-task">VA reviews Raw Scraping Results, moves qualified leads</div>
+            <div class="schedule-day">On demand</div>
+            <div class="schedule-task">Push qualified leads to HubSpot (push_to_hubspot.py)</div>
+            <div class="schedule-day">1st of month</div>
+            <div class="schedule-task">Ottawa permits processed (scrape_permits.py)</div>
+            <div class="schedule-day">1st of month</div>
+            <div class="schedule-task">Ottawa dev applications scraped with owner lookup (scrape_devapps.py)</div>
+            <div class="schedule-day">Bi-weekly</div>
+            <div class="schedule-task">LinkedIn CSV export processed (scrape_linkedin.py)</div>
+        </div>
+    </div>
+
+    <!-- ===================== -->
+    <!-- MONTHLY COST          -->
+    <!-- ===================== -->
+    <div class="section-header">
+        <h2>Monthly Operating Cost</h2>
+    </div>
+
+    <table class="priority-table">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Cost</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Apollo Basic</td>
+                <td>$49/mo</td>
+                <td>~416 enrichment credits/month</td>
+            </tr>
+            <tr>
+                <td>DataBid</td>
+                <td>Existing subscription</td>
+                <td>No additional cost</td>
+            </tr>
+            <tr>
+                <td>Sales Navigator</td>
+                <td>Existing subscription</td>
+                <td>No additional cost</td>
+            </tr>
+            <tr>
+                <td>HubSpot</td>
+                <td>Existing plan</td>
+                <td>No additional cost</td>
+            </tr>
+            <tr>
+                <td>Server / VPS (optional)</td>
+                <td>~$15/mo</td>
+                <td>To run cron jobs if not running locally</td>
+            </tr>
+            <tr>
+                <td style="font-weight: 700;">Total</td>
+                <td style="font-weight: 700;">~$64/mo</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="footer">
+        Elmridge Carpentry &mdash; Lead Generation Automation &mdash; Prepared by Victor Ballivian
+    </div>
+
+</div>
+</body>
+</html>

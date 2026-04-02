@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+        background: #f8fafc;
+        color: #1a1a1a;
+        padding: 40px;
+    }
+    .page-title {
+        text-align: center;
+        font-size: 28px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 6px;
+    }
+    .page-subtitle {
+        text-align: center;
+        font-size: 14px;
+        color: #64748b;
+        margin-bottom: 40px;
+    }
+
+    /* SECTION HEADERS */
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        margin-top: 50px;
+    }
+    .section-header h2 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+    .section-badge {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .badge-sheets { background: #dcfce7; color: #166534; }
+    .badge-hubspot { background: #dbeafe; color: #1e40af; }
+    .badge-roles { background: #fef3c7; color: #92400e; }
+    .badge-auto { background: #ede9fe; color: #5b21b6; }
+
+    /* FLOW CONTAINERS */
+    .flow-container {
+        display: flex;
+        align-items: flex-start;
+        gap: 0;
+        margin: 20px 0;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* CARDS */
+    .card {
+        border-radius: 12px;
+        padding: 20px;
+        min-width: 200px;
+        max-width: 240px;
+        position: relative;
+    }
+    .card h3 {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+    .card p {
+        font-size: 12px;
+        line-height: 1.5;
+        color: #475569;
+    }
+    .card-green { background: #f0fdf4; border: 2px solid #86efac; }
+    .card-green h3 { color: #166534; }
+    .card-blue { background: #eff6ff; border: 2px solid #93c5fd; }
+    .card-blue h3 { color: #1e40af; }
+    .card-orange { background: #fff7ed; border: 2px solid #fdba74; }
+    .card-orange h3 { color: #9a3412; }
+    .card-red { background: #fef2f2; border: 2px solid #fca5a5; }
+    .card-red h3 { color: #991b1b; }
+    .card-gray { background: #f1f5f9; border: 2px solid #cbd5e1; }
+    .card-gray h3 { color: #334155; }
+    .card-purple { background: #faf5ff; border: 2px solid #c4b5fd; }
+    .card-purple h3 { color: #5b21b6; }
+
+    /* ARROWS */
+    .arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: #94a3b8;
+        padding: 0 8px;
+        min-width: 40px;
+    }
+    .arrow-down {
+        display: flex;
+        justify-content: center;
+        font-size: 24px;
+        color: #94a3b8;
+        padding: 12px 0;
+        width: 100%;
+    }
+
+    /* GATE */
+    .gate {
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+        color: white;
+        text-align: center;
+        padding: 18px 30px;
+        border-radius: 12px;
+        margin: 30px auto;
+        max-width: 700px;
+    }
+    .gate h3 {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: #93c5fd;
+    }
+    .gate p {
+        font-size: 13px;
+        color: #cbd5e1;
+    }
+    .gate .checklist {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 10px;
+        flex-wrap: wrap;
+    }
+    .gate .check-item {
+        font-size: 13px;
+        color: #86efac;
+        font-weight: 600;
+    }
+
+    /* PRIORITY */
+    .priority-bar {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        margin: 20px 0;
+        flex-wrap: wrap;
+    }
+    .priority-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+    .priority-high { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; }
+    .priority-med { background: #fffbeb; color: #92400e; border: 1px solid #fcd34d; }
+    .priority-low { background: #f0fdf4; color: #166534; border: 1px solid #86efac; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-green { background: #22c55e; }
+
+    /* ROLES TABLE */
+    .roles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+        margin: 20px 0;
+    }
+    .role-card {
+        border-radius: 12px;
+        padding: 20px;
+        border: 2px solid #e2e8f0;
+        background: white;
+    }
+    .role-card h3 {
+        font-size: 15px;
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 4px;
+    }
+    .role-card .role-tool {
+        font-size: 11px;
+        color: #64748b;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+    }
+    .role-card p {
+        font-size: 12px;
+        line-height: 1.5;
+        color: #475569;
+    }
+
+    .side-flow {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        margin: 20px auto;
+        max-width: 700px;
+        justify-content: center;
+    }
+
+    .divider {
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(to right, transparent, #cbd5e1, transparent);
+        margin: 40px 0;
+    }
+
+    .outcome-row {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        margin-top: 12px;
+    }
+
+    .auto-badge {
+        display: inline-block;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 4px;
+        background: #ede9fe;
+        color: #5b21b6;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+    }
+
+    @media print {
+        body { padding: 20px; background: white; }
+        .card { break-inside: avoid; }
+    }
+</style>
+</head>
+<body>
+
+<div class="page-title">Option C: Hybrid System</div>
+<div class="page-subtitle">Elmridge Carpentry - Lead Generation Pipeline</div>
+
+<!-- PRIORITY SYSTEM -->
+<div class="priority-bar">
+    <div class="priority-item priority-high"><div class="dot dot-red"></div>HIGH - Excavation / crane on site - 24 hours</div>
+    <div class="priority-item priority-med"><div class="dot dot-yellow"></div>MEDIUM - Permits approved - 1 week</div>
+    <div class="priority-item priority-low"><div class="dot dot-green"></div>LOW - Planning / zoning - 2 weeks</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- GOOGLE SHEETS: RAW SCRAPING -->
+<div class="section-header">
+    <h2>Step 1: Raw Scraping Results</h2>
+    <span class="section-badge badge-sheets">Google Sheets</span>
+</div>
+
+<div class="flow-container">
+    <div class="card card-green">
+        <h3>Data Sources</h3>
+        <div class="auto-badge">Automated</div>
+        <p>4 scrapers feed leads into Raw Scraping Results:</p>
+        <p style="margin-top:8px; font-size:11px; color:#166534; font-weight:600;">
+            DataBid (weekly, Sundays)<br>
+            Ottawa Permits (monthly, 1st)<br>
+            Ottawa DevApps (monthly, 1st)<br>
+            HubSpot Legacy (warm/hot leads)
+        </p>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div class="card card-green">
+        <h3>Apollo Enrichment</h3>
+        <div class="auto-badge">Automated</div>
+        <p>Runs Mon-Fri. For each company:</p>
+        <p style="margin-top:6px;">
+            1. Free search: find decision maker<br>
+            2. Paid enrichment: get email<br>
+            3. Updates sheet row with contact
+        </p>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div class="card card-green">
+        <h3>Waiting for Gate</h3>
+        <p>Leads sit here until all 4 requirements are met. Incomplete leads stay in Raw Scraping.</p>
+    </div>
+</div>
+
+<div class="side-flow">
+    <div class="card card-gray" style="max-width:300px;">
+        <h3>Incomplete Leads</h3>
+        <p>Missing email/phone, address, or priority. Tagged by source (DataBid, Permits, DevApps, HubSpot Legacy). Enrichment retries daily.</p>
+    </div>
+    <div style="font-size:12px; color:#94a3b8; padding-top:20px;">&#8592; Stays until complete</div>
+</div>
+
+<!-- GATE -->
+<div class="gate">
+    <h3>THE GATE</h3>
+    <div class="auto-badge" style="background: rgba(255,255,255,0.15); color: white;">Runs every 5 minutes</div>
+    <p>Only complete leads cross into Qualified Leads. Rows are MOVED, not copied.</p>
+    <div class="checklist">
+        <span class="check-item">&#10003; Company</span>
+        <span class="check-item">&#10003; Email or Phone</span>
+        <span class="check-item">&#10003; Project Address</span>
+        <span class="check-item">&#10003; Priority (H/M/L)</span>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- QUALIFIED LEADS -->
+<div class="section-header">
+    <h2>Step 2: Qualified Leads</h2>
+    <span class="section-badge badge-sheets">Google Sheets</span>
+    <span class="section-badge badge-roles">VA reviews here</span>
+</div>
+
+<div class="flow-container">
+    <div class="card card-green" style="max-width: 300px;">
+        <h3>Human Review</h3>
+        <p>VA or Patrick reviews each lead:</p>
+        <p style="margin-top:6px;">
+            - Is this a real opportunity?<br>
+            - Correct company and contact?<br>
+            - Relevant project for Elmridge?<br>
+            <br>
+            <strong>If yes: tick the "Push to HubSpot" checkbox</strong>
+        </p>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div class="card card-blue" style="max-width: 300px;">
+        <h3>Push to HubSpot</h3>
+        <div class="auto-badge">Automated</div>
+        <p>Every 5 minutes, checked leads are pushed to HubSpot Lead Pipeline v2 as "New Lead" with:</p>
+        <p style="margin-top:6px;">
+            - Deal name + address<br>
+            - Contact + email associated<br>
+            - Priority, source, stage<br>
+            - Status changes to "Pushed"
+        </p>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- HUBSPOT LEAD PIPELINE -->
+<div class="section-header">
+    <h2>Step 3: HubSpot - Lead Pipeline v2</h2>
+    <span class="section-badge badge-hubspot">SDR / Jerry</span>
+</div>
+
+<div class="flow-container">
+    <div class="card card-blue">
+        <h3>New Lead</h3>
+        <p>Just arrived from Sheets. Fully qualified. Ready to work.</p>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div class="card card-blue">
+        <h3>Outreach In Progress</h3>
+        <p>SDR is calling and emailing. No response yet. Follow the priority-based outreach sequence.</p>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div class="card card-blue">
+        <h3>Engaged</h3>
+        <p>They responded. Conversation is happening. Once there's a real opportunity to bid, move to Buyers Pipeline.</p>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- HUBSPOT BUYERS PIPELINE -->
+<div class="section-header">
+    <h2>Step 4: HubSpot - Buyers Pipeline v2</h2>
+    <span class="section-badge badge-hubspot">Jerry + Abdul</span>
+</div>
+
+<div class="flow-container">
+    <div class="card card-purple">
+        <h3>Project Watch List</h3>
+        <p>Engaged, project is coming but not ready to bid yet. Follow up every 2-3 weeks.</p>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div class="card card-purple">
+        <h3>Pre-Qualification</h3>
+        <p>Need to submit a preQual form first. Submit info within 1 day.</p>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div class="card card-orange">
+        <h3>Currently Bidding</h3>
+        <p>Abdul preparing the bid. Pat/Mike review before sending.</p>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div class="card card-orange">
+        <h3>Bid Submitted</h3>
+        <p>Follow-up sequence:<br>
+        Day 1: Call<br>
+        Day 3: Email<br>
+        Day 7: Call<br>
+        Day 14: Email<br>
+        Day 21: Call</p>
+    </div>
+</div>
+
+<div class="outcome-row">
+    <div class="card card-green" style="min-width:260px;">
+        <h3>Bid Won</h3>
+        <p>Abdul starts preconstruction setup. Team notified. Update deal value.</p>
+    </div>
+    <div class="card card-red" style="min-width:260px;">
+        <h3>Bid Lost</h3>
+        <p>Log why. Move company back to Project Watch List or Nurture for next opportunity.</p>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ROLES -->
+<div class="section-header">
+    <h2>Team Roles</h2>
+    <span class="section-badge badge-roles">Who does what</span>
+</div>
+
+<div class="roles-grid">
+    <div class="role-card">
+        <h3>Automation (Scripts)</h3>
+        <div class="role-tool">Runs on schedule, no human needed</div>
+        <p>Scrapers run weekly/monthly. Apollo enriches Mon-Fri. Gate checks every 5 min. HubSpot push every 5 min when checkbox is ticked.</p>
+    </div>
+    <div class="role-card">
+        <h3>VA / Mukesh</h3>
+        <div class="role-tool">Google Sheets only</div>
+        <p>Reviews Qualified Leads tab. Ticks "Push to HubSpot" checkbox on good leads. Mon + Thu, 1-2 hours per session.</p>
+    </div>
+    <div class="role-card">
+        <h3>SDR</h3>
+        <div class="role-tool">HubSpot + Phone + Email</div>
+        <p>First outreach on new leads. Daily, priority order. Follows outreach sequence. Logs everything. Hands off to Jerry when engaged.</p>
+    </div>
+    <div class="role-card">
+        <h3>Jerry</h3>
+        <div class="role-tool">HubSpot (priority filter) + Site visits</div>
+        <p>HIGH priority only. Crane siting, urgent projects, physical site visits. 2-3 hours/day. Follows up on bid submissions.</p>
+    </div>
+    <div class="role-card">
+        <h3>Abdul</h3>
+        <div class="role-tool">HubSpot + Operations</div>
+        <p>Prepare bids, manage Currently Bidding and Bid Submitted. Gets Pat/Mike approval before sending.</p>
+    </div>
+    <div class="role-card">
+        <h3>Pat / Mike</h3>
+        <div class="role-tool">HubSpot (overview)</div>
+        <p>Review bids before submission. Weekly pipeline review (Fridays, 30 min). Strategic decisions.</p>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- BOTTOM LINE -->
+<div class="gate" style="margin-top:20px;">
+    <h3>THE BOTTOM LINE</h3>
+    <p style="font-size:15px; color:white; font-weight:600; margin-bottom:8px;">Only real opportunities enter HubSpot</p>
+    <p>Every lead must have a company, a reachable contact (email or phone), a project address, and a priority level before it crosses the gate. The VA is the final human check before HubSpot. Everything else is automated.</p>
+</div>
+
+</body>
+</html>
