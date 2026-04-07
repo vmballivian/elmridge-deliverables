@@ -1,0 +1,28 @@
+# Sensitive — contains hardcoded HubSpot API token
+sheets_appscript.js
+
+# Environment / credentials
+.env
+*.env
+token_sheets.json
+credentials.json
+
+# Python scripts (kept local, not part of public deliverables repo)
+*.py
+
+# Logs and data
+logs/
+data/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Backup folder for old conversions
+*.bak
